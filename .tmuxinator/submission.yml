@@ -1,0 +1,62 @@
+# ~/.tmuxinator/submission.yml
+
+name: submission
+root: ~/submission
+
+# Optional tmux socket
+socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+# pre: esp vm up
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+tmux_options: -S /tmp/pair
+
+# Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
+# tmux_command: byobu
+
+# Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
+# startup_window: logs
+
+# Controls whether the tmux session should be attached to automatically. Defaults to true.
+# attach: false
+
+# Runs after everything. Use it to attach to tmux with custom options etc.
+# post: tmux -CC attach -t submission
+
+windows:
+  - vim:
+    - vim 
+  - git:
+    - git status
+  - rspec:
+    - esp vm ssh
+    - cd ~/submission
+  - karma:
+    - esp vm ssh
+    - cd ~/submission
+    - karma start
+  - features:
+    - esp vm ssh
+    - cd ~/submission
+  - workflows:
+  - vm:
+    - esp vm ssh
+    - cd ~/submission
+  - logs:
+      layout: main-vertical
+      panes:
+        - esp_dev:
+          - esp vm ssh
+          - cd ~/submission
+          - tail -f log/esp_development.log
+        - rails_dev:
+          - esp vm ssh
+          - cd ~/submission
+          - tail -f log/development.log
+  - MISC:
