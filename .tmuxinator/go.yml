@@ -1,10 +1,10 @@
-# ~/.tmuxinator/submission.yml
+# ~/.tmuxinator/witiful.yml
 
-name: submission
-root: ~/submission
+name: go
+root: ~/src/github.com/dysolution
 
 # Optional tmux socket
-socket_name: foo
+# socket_name: foo
 
 # Runs before everything. Use it to start daemons etc.
 # pre: sudo /etc/rc.d/mysqld start
@@ -15,7 +15,6 @@ socket_name: foo
 
 # Pass command line options to tmux. Useful for specifying a different tmux.conf.
 # tmux_options: -f ~/.tmux.mac.conf
-tmux_options: -S /tmp/pair
 
 # Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
 # tmux_command: byobu
@@ -30,11 +29,9 @@ tmux_options: -S /tmp/pair
 # post: tmux -CC attach -t submission
 
 windows:
-  - vim:
+  - main:
       layout: main-vertical
       panes:
         - vim:
-          - vim .
-        - logs:
-          - esp vm ssh
-          - cd apps/submission
+          - vim ~/src/github.com/dysolution
+        - bash

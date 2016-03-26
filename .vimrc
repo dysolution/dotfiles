@@ -1,5 +1,10 @@
 " We use a vim
 set nocompatible
+
+let mapleader=","
+nnoremap <leader>r <Plug>(go-run)
+nnoremap <leader>t <Plug>(go-test)
+
 "
 " Colo(u)red or not colo(u)red
 " If you want color you should set this to true
@@ -18,11 +23,17 @@ if has("syntax")
         set t_Co=0
     endif
 endif
-" change colorscheme from default to vividchalk
-colorscheme vividchalk
+
+" get rid of green line numbers
+let base16colorspace=256
+
 
 " display the match for a search pattern when halfway typing it
 set incsearch
+" case-insensitive search
+set ignorecase
+set smartcase
+
 
 " create a command which toggles highlighted searches on/off
 map <F5> :let &hlsearch=!&hlsearch<CR>
@@ -38,7 +49,7 @@ filetype plugin indent on
 
 " highlight when braces and parens match
 set showmatch
-set matchtime=2 " default time of 5 tenths of a second too long
+set matchtime=1 " default time of 5 tenths of a second too long
 
 " allow backspace to delete characters before the cursor
 " the 3 options tell vim to delete white space at start of the line,
@@ -51,8 +62,8 @@ set autoindent
 " keep 50 commands and 50 search patterns in the history
 set history=1000
 
-" only keep 100 levels of undo
-set undolevels=100
+" keep 1000 levels of undo
+set undolevels=1000
 
 " always display the current cursor position in the lower right corner
 set ruler
@@ -77,7 +88,13 @@ map <Up> gk
 map <Down> gj
 
 " break lines longer than 78 characters, but only for text files
-"autocmd FileType text setlocal textwidth=78
+" autocmd FileType text setlocal textwidth=78
+
+autocmd BufNewFile,BufRead *.ad set filetype=asciidoc
+autocmd BufNewFile,BufRead *.adoc set filetype=asciidoc
+autocmd BufNewFile,BufRead *.asciidoc set filetype=asciidoc
+autocmd FileType asciidoc setlocal wrap linebreak nolist autoindent textwidth=78
+
 
 " set wordwrap on and don't allow words to break
 set wrap
@@ -115,16 +132,8 @@ set wildchar=<Tab> wildmenu wildmode=full
 set wildcharm=<C-Z>
 nnoremap <F10> :b <C-Z>
 
-" create command shortcut "Zap" to zap.py script
-com -nargs=* -range=% -bar Zap %!zap.py <args> -
-
 " file format detection and interpretation!
 set fileformats=unix,dos,mac
-
-" force saves in particular file formats
-com Wmac set fileformat=mac | write
-com Wdos set fileformat=dos | write
-com Wunix set fileformat=unix | write
 
 " confirm operations that would erase unsaved buffer changes
 set confirm
@@ -145,7 +154,7 @@ set visualbell
 set number
 
 " highlight the 81st column to visually mark an 80-character line width
-set colorcolumn=81
+set colorcolumn=80
 
 " window resizing
 " nmap = :resize +1<CR>
@@ -170,8 +179,8 @@ au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 au FileType html exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 
 " format (indent) json
-nmap <C-j> :%!python -m json.tool<CR>
-vmap <Leader>j :!python -m json.tool<CR>
+" nmap <C-j> :%!python -m json.tool<CR>
+" vmap <Leader>j :!python -m json.tool<CR>
 
 " CtrlP
 set runtimepath^=~/.vim/bundle/ctrlp.vim
@@ -180,5 +189,40 @@ execute pathogen#infect()
 
 " display current git branch on statusline
 set statusline=%{fugitive#statusline()}
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_jump = 0
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_loc_list_height = 4
+let g:syntastic_html_checkers=['']
+" let g:syntastic_ruby_exec = 'ruby2.1.2'
+let g:airline_powerline_fonts = 1
+
+" vim-go
+let g:go_fmt_fail_silently = 1
+let g:go_fmt_command = "goimports"
+
+let g:hybrid_use_Xresources = 1
+
+" change colorscheme from default
+"colorscheme molokai
+"colorscheme railscasts
+" colorscheme hybrid
+colorscheme base16-default
+set background=dark
+
+" set cursorcolumn
+set cursorline
+
+set relativenumber
+
+" disable swap file
+set noswapfile
+set nobackup
 
 " ~/.vimrc ends here
