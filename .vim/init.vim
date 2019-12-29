@@ -1,1 +1,0 @@
-/Users/jpeterson/.vimrc
