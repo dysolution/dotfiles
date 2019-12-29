@@ -1,10 +1,19 @@
 " We use a vim
 set nocompatible
 
-let mapleader=","
-nnoremap <leader>r <Plug>(go-run)
-nnoremap <leader>t <Plug>(go-test)
+" set tabs to be equivalent to 4 characters instead of 8 (the default)
+set shiftwidth=2
+set softtabstop=2
+set tabstop=4
+set expandtab
 
+let mapleader=","
+autocmd FileType go nmap <leader>r <Plug>(go-run)
+autocmd FileType go nmap <leader>t <Plug>(go-test)
+autocmd FileType go nmap <leader>b  <Plug>(go-build)
+autocmd FileType go nmap gd :GoDef<CR>
+
+nnoremap <leader><leader> <c-^>
 "
 " Colo(u)red or not colo(u)red
 " If you want color you should set this to true
@@ -24,10 +33,6 @@ if has("syntax")
     endif
 endif
 
-" get rid of green line numbers
-let base16colorspace=256
-
-
 " display the match for a search pattern when halfway typing it
 set incsearch
 " case-insensitive search
@@ -37,9 +42,6 @@ set smartcase
 
 " create a command which toggles highlighted searches on/off
 map <F5> :let &hlsearch=!&hlsearch<CR>
-
-" turn on filetype detection
-filetype plugin indent on
 
 " display tab characters and end-of-line whitespace
 " (unfortunately, the list option is mutually exlusive with
@@ -90,21 +92,33 @@ map <Down> gj
 " break lines longer than 78 characters, but only for text files
 " autocmd FileType text setlocal textwidth=78
 
-autocmd BufNewFile,BufRead *.ad set filetype=asciidoc
-autocmd BufNewFile,BufRead *.adoc set filetype=asciidoc
-autocmd BufNewFile,BufRead *.asciidoc set filetype=asciidoc
-autocmd FileType asciidoc setlocal wrap linebreak nolist autoindent textwidth=78
+set winwidth=84
+" We have to have a winheight bigger than we want to set winminheight. But if
+" we set winheight to be huge before winminheight, the winminheight set will
+" fail.
+set winheight=8
+set winminheight=8
+set winheight=999
 
+" AsciiDoc filetype
+autocmd BufNewFile,BufRead *.{ad,adoc,asciidoc} set filetype=asciidoc
+autocmd FileType asciidoc setlocal nolist autoindent
+
+" C# filetype
+autocmd BufNewFile,BufRead *.s set formatprg=astyle\ -T4pb
+
+" Golang filetype
+autocmd BufNewFile,BufRead *.go set filetype=go
+
+" YAML filetype
+autocmd BufNewFile,BufReadPost,BufRead *.{yaml,yml,.yml.src} set filetype=yaml
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 " set wordwrap on and don't allow words to break
 set wrap
 set linebreak
 
-" set tabs to be equivalent to 4 characters instead of 8 (the default)
-set shiftwidth=2
-set softtabstop=2
-set tabstop=4
-set expandtab
+autocmd FileType go setlocal tabstop=8
 
 " always indent to multiples of the shiftwidth
 set shiftround
@@ -168,31 +182,52 @@ nmap <S-Right> <C-w><Right>
 nmap <S-Up> <C-w><Up>
 nmap <S-Down> <C-w><Down>
 
-" NERDTreeToggle
-nmap <C-t> :NERDTreeToggle<CR>
-
 " preserve buffer history when switching
 set hidden
 
 " automatically format (indent) xml, html
-au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
-au FileType html exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
+" au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
+" au FileType html exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 
 " format (indent) json
+" autocmd FileType json autocmd BufWritePre <buffer> :%!jq '.'
 " nmap <C-j> :%!python -m json.tool<CR>
 " vmap <Leader>j :!python -m json.tool<CR>
 
+
+autocmd FileType python setlocal expandtab softtabstop=2 shiftwidth=2 tabstop=2
+
+autocmd FileType cs setlocal expandtab softtabstop=4 shiftwidth=4 tabstop=4
+
+
 " CtrlP
+if executable('ag')
+  let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
+endif
 set runtimepath^=~/.vim/bundle/ctrlp.vim
+let g:ctrlp_working_path_mode = ''
+
+set path=$PWD/**
 
 execute pathogen#infect()
+syntax enable
+" turn on filetype detection
+filetype plugin indent on
 
+
+" git commit auto-wrap at 72 columns
+au FileType gitcommit set tw=72
+" when git committing, show a guide to help keep commit messages to 72 columns
+au FileType gitcommit set colorcolumn=72
+
+" Ruby
+let g:ruby_indent_assignment_style = 'variable'
+"
 " display current git branch on statusline
 set statusline=%{fugitive#statusline()}
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_jump = 0
 let g:syntastic_auto_loc_list = 1
@@ -200,29 +235,148 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_loc_list_height = 4
 let g:syntastic_html_checkers=['']
-" let g:syntastic_ruby_exec = 'ruby2.1.2'
 let g:airline_powerline_fonts = 1
+let g:syntastic_python_checkers = ['pylint']
+
+" Elm
+let g:elm_browser_command = ""
+let g:elm_detailed_complete = 0
+let g:elm_format_autosave = 1
+let g:elm_format_fail_silently = 0
+let g:elm_jump_to_error = 0
+let g:elm_make_output_file = "elm.js"
+let g:elm_make_show_warnings = 0
+let g:elm_setup_keybindings = 1
+let g:elm_syntastic_show_warnings = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+
+" gopls
+let g:go_def_mode='gopls'
 
 " vim-go
-let g:go_fmt_fail_silently = 1
+let g:go_def_mapping_enabled = 0
+" let g:go_def_mode = "godef"
 let g:go_fmt_command = "goimports"
-
+let g:go_fmt_fail_silently = 0
+let g:go_list_type = "quickfix"
 let g:hybrid_use_Xresources = 1
+let g:syntastic_go_checkers = ['go', 'golint', 'errcheck']
+" let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+"let g:go_metalinter_autosave = 1
 
-" change colorscheme from default
-"colorscheme molokai
-"colorscheme railscasts
-" colorscheme hybrid
-colorscheme base16-default
-set background=dark
+" Automatically get signature/type info for object under cursor
+let g:go_auto_type_info = 1
+
+
+let g:go_highlight_functions = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_interfaces = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+" let g:go_bin_path = "/usr/local/bin/go"
+set autowrite
 
 " set cursorcolumn
-set cursorline
+" set cursorline
 
-set relativenumber
+" set relativenumber
 
 " disable swap file
 set noswapfile
 set nobackup
+
+" cd to the dir of the currently-open file
+" set autochdir
+
+" NERDTreeToggle
+nmap <C-t> :NERDTreeToggle<CR>
+
+" vim-flog
+" :silent exe "g:flog_enable"
+
+" neocomplete
+" let g:neocomplete#enable_at_startup = 1
+
+autocmd FileType tf setlocal shiftwidth=2 tabstop=2
+let g:terraform_align=1
+
+" Ack / ag (The Silver Searcher)
+" if executable('ag')
+"   let g:ackprg = 'ag --vimgrep'
+" endif
+
+" ripgrep
+if executable('rg')
+  let g:ackprg = 'rg --vimgrep --no-heading'
+endif
+
+" vim-plugged
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
+call plug#begin('~/.vim/plugged')
+Plug 'dense-analysis/ale'
+Plug 'elmcast/elm-vim'
+Plug 'junegunn/fzf.vim'
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}} " Coc intellisense engine
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+call plug#end()
+
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
+
+" fzf
+set rtp+=/usr/local/opt/fzf
+nmap <C-p> :Files<CR>
+
+" save and restore folds upon reopening
+autocmd BufWinLeave *.* mkview
+autocmd BufWinEnter *.* silent loadview
+
+" Ale
+let g:ale_lint_on_text_change = 1
+let g:ale_completion_enabled = 1
+let g:ale_linters = {
+  \ 'ruby': ['rubocop'],
+  \ }
+"  \ 'javascript': [],
+" \ 'ruby': ['rubocop'],
+" \ 'ruby': [],
+let g:ale_fixers = {
+      \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \ 'javascript': ['prettier_standard'],
+      \ }
+" let g:ale_fix_on_save = 1
+
+set tags=./tags;
+
+"netrw
+" let g:netrw_banner = 2
+
+" Reset syntastic highlighting
+highlight clear SpellBad
+highlight clear SpellCap
+highlight SpellBad cterm=bold
+highlight SpellCap cterm=bold
+
+" Allow long linter suggestions to wrap to a second line
+set cmdheight=2
+
+" Conquer of Completion
+nmap <silent> gd <Plug>(coc-definition)
+
+" coc-prettier
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 " ~/.vimrc ends here
