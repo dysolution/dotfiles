@@ -1,4 +1,4 @@
-set mainfont {{Lucida Grande} 14}
+set mainfont {{Lucida Grande} 10}
 set textfont {Monaco 14}
 set uifont {{Lucida Grande} 9 bold}
 set tabstop 8
@@ -51,12 +51,12 @@ set indexcirclecolor green
 set circlecolors {white blue gray blue blue}
 set linkfgcolor blue
 set circleoutlinecolor black
-set geometry(main) 1619x1005+5+28
-set geometry(state) normal
-set geometry(topwidth) 1619
+set geometry(main) 1436x855+4+23
+set geometry(state) zoomed
+set geometry(topwidth) 1436
 set geometry(topheight) 165
 set geometry(pwsash0) "633 1"
 set geometry(pwsash1) "1080 1"
 set geometry(botwidth) 538
-set geometry(botheight) 835
+set geometry(botheight) 685
 set permviews {}
