@@ -1,2 +1,3 @@
 *.private
 .vim/**
+.config/base16-shell/**
