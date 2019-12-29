@@ -291,6 +291,8 @@ set nobackup
 
 " cd to the dir of the currently-open file
 " set autochdir
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+
 
 " NERDTreeToggle
 nmap <C-t> :NERDTreeToggle<CR>
@@ -341,8 +343,8 @@ set rtp+=/usr/local/opt/fzf
 nmap <C-p> :Files<CR>
 
 " save and restore folds upon reopening
-autocmd BufWinLeave *.* mkview
-autocmd BufWinEnter *.* silent loadview
+" autocmd BufWinLeave *.* mkview
+" autocmd BufWinEnter *.* silent loadview
 
 " Ale
 let g:ale_lint_on_text_change = 1
