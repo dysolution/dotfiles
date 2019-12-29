@@ -1,12 +1,6 @@
-if [ -f ~/.bashrc ]; then
-     source ~/.bashrc
-fi
+# see ~/.profile
+source ~/.profile
 
-if [ -f ~/.profile ]; then
-     source ~/.profile
-fi
+export AWS_PROFILE=oktad
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-# tab completion for branches
-source ~/.git-completion.bash
