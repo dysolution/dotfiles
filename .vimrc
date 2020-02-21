@@ -1,23 +1,14 @@
-" We use a vim
 set nocompatible
 
-" set tabs to be equivalent to 4 characters instead of 8 (the default)
 set shiftwidth=2
 set softtabstop=2
-set tabstop=4
+set tabstop=4 "set tabs to be equivalent to 4 characters (8 is default)
 set expandtab
 
 let mapleader=","
-autocmd FileType go nmap <leader>r <Plug>(go-run)
-autocmd FileType go nmap <leader>t <Plug>(go-test)
-autocmd FileType go nmap <leader>b  <Plug>(go-build)
-autocmd FileType go nmap gd :GoDef<CR>
 
 nnoremap <leader><leader> <c-^>
-"
-" Colo(u)red or not colo(u)red
-" If you want color you should set this to true
-"
+
 set hlsearch
 let color = "true"
 
@@ -32,22 +23,11 @@ if has("syntax")
         set t_Co=0
     endif
 endif
+syntax enable
 
-" display the match for a search pattern when halfway typing it
-set incsearch
-" case-insensitive search
-set ignorecase
+set incsearch "display the match for a search pattern when halfway typing it
+set ignorecase "case-insensitive search
 set smartcase
-
-
-" create a command which toggles highlighted searches on/off
-map <F5> :let &hlsearch=!&hlsearch<CR>
-
-" display tab characters and end-of-line whitespace
-" (unfortunately, the list option is mutually exlusive with
-" the linebreak option; it's one or the other!)
-"set list
-"set listchars=tab:>-,trail:-
 
 " highlight when braces and parens match
 set showmatch
@@ -58,39 +38,16 @@ set matchtime=1 " default time of 5 tenths of a second too long
 " a line break, and the character before where Insert mode started
 set backspace=indent,eol,start
 
-" tell vim to repeat indent of previous line
-set autoindent
-
-" keep 50 commands and 50 search patterns in the history
+set autoindent " tell vim to repeat indent of previous line
 set history=1000
-
-" keep 1000 levels of undo
-set undolevels=1000
-
-" always display the current cursor position in the lower right corner
-set ruler
-
-" display incomplete commands in the lower right corner as they are being typed
-set showcmd
-
-" map the Q key to the gq command
-map Q gq
+set undolevels=1000 " keep 1000 levels of undo
+set ruler "display the current cursor position in the lower right corner
+set showcmd "display incomplete commands in the lower right corner as they are being typed
 
 " a complicated keymapping:
 " make "p" in visual mode overwrite the selected text with the previously
 " yanked text
 vnoremap p <Esc>:let current_reg = @"<CR>gvs<C-R>=current_reg<CR><Esc>
-
-" map the up and down keys so that they work like I'm used to,
-" where going up goes up 1 visual line (not necessarily one line of text)
-" and going down goes down 1 visual line (not necessarily one lineof text)
-"map k gk
-"map j gj
-map <Up> gk
-map <Down> gj
-
-" break lines longer than 78 characters, but only for text files
-" autocmd FileType text setlocal textwidth=78
 
 set winwidth=84
 " We have to have a winheight bigger than we want to set winminheight. But if
@@ -107,8 +64,13 @@ autocmd FileType asciidoc setlocal nolist autoindent
 " C# filetype
 autocmd BufNewFile,BufRead *.s set formatprg=astyle\ -T4pb
 
-" Golang filetype
+" Golang
+autocmd FileType go nmap <leader>r <Plug>(go-run)
+autocmd FileType go nmap <leader>t <Plug>(go-test)
+autocmd FileType go nmap <leader>b  <Plug>(go-build)
+autocmd FileType go nmap gd :GoDef<CR>
 autocmd BufNewFile,BufRead *.go set filetype=go
+autocmd FileType go setlocal tabstop=8
 
 " YAML filetype
 autocmd BufNewFile,BufReadPost,BufRead *.{yaml,yml,.yml.src} set filetype=yaml
@@ -117,8 +79,6 @@ autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 " set wordwrap on and don't allow words to break
 set wrap
 set linebreak
-
-autocmd FileType go setlocal tabstop=8
 
 " always indent to multiples of the shiftwidth
 set shiftround
@@ -138,43 +98,20 @@ autocmd BufReadPost *
             \   exe "normal g'\"" |
             \ endif
 
-" allow buffer to be modified by filter commands
-set modifiable
+set modifiable "allow buffer to be modified by filter commands
 
 " easier access to buffers
 set wildchar=<Tab> wildmenu wildmode=full
 set wildcharm=<C-Z>
 nnoremap <F10> :b <C-Z>
 
-" file format detection and interpretation!
-set fileformats=unix,dos,mac
-
-" confirm operations that would erase unsaved buffer changes
-set confirm
-
-" set up default printing options
-set printoptions=paper:letter,duplex:off,number:y
-
-" set filebrowser
-" the following setting limits tab completion to longest it can find based on
-" what you've already typed in; sometimes useful, other times annoying; YMMV
-"set wildmode=longest:full
-set wildmenu
-
-" use the visualbell instead of the beep on errors
-set visualbell
-
-" show line numbers
-set number
-
-" highlight the 81st column to visually mark an 80-character line width
-set colorcolumn=80
-
-" window resizing
-" nmap = :resize +1<CR>
-" nmap - :resize -1<CR>
-" nmap ] :vertical resize +1<CR>
-" nmap [ :vertical resize -1<CR>
+set fileformats=unix,dos,mac "file format detection and interpretation
+set confirm "confirm operations that would erase unsaved buffer changes
+set printoptions=paper:letter,duplex:off,number:y "default printing options
+set wildmenu "set filebrowser
+set visualbell "use the visualbell instead of the beep on errors
+set number "show line numbers
+set colorcolumn=80 "highlight an 80-character line width
 
 " window focusing
 nmap <S-Left> <C-w><Left>
@@ -182,23 +119,16 @@ nmap <S-Right> <C-w><Right>
 nmap <S-Up> <C-w><Up>
 nmap <S-Down> <C-w><Down>
 
-" preserve buffer history when switching
-set hidden
+set hidden "preserve buffer history when switching
 
 " automatically format (indent) xml, html
 " au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 " au FileType html exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 
-" format (indent) json
-" autocmd FileType json autocmd BufWritePre <buffer> :%!jq '.'
-" nmap <C-j> :%!python -m json.tool<CR>
-" vmap <Leader>j :!python -m json.tool<CR>
-
-
+" Python
 autocmd FileType python setlocal expandtab softtabstop=2 shiftwidth=2 tabstop=2
-
+let g:syntastic_python_checkers = ['pylint']
 autocmd FileType cs setlocal expandtab softtabstop=4 shiftwidth=4 tabstop=4
-
 
 " CtrlP
 if executable('ag')
@@ -210,7 +140,6 @@ let g:ctrlp_working_path_mode = ''
 set path=$PWD/**
 
 execute pathogen#infect()
-syntax enable
 " turn on filetype detection
 filetype plugin indent on
 
@@ -236,7 +165,6 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_loc_list_height = 4
 let g:syntastic_html_checkers=['']
 let g:airline_powerline_fonts = 1
-let g:syntastic_python_checkers = ['pylint']
 
 " Elm
 let g:elm_browser_command = ""
@@ -283,7 +211,7 @@ set autowrite
 " set cursorcolumn
 " set cursorline
 
-" set relativenumber
+set relativenumber
 
 " disable swap file
 set noswapfile
@@ -325,12 +253,14 @@ endif
 
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/.vim/plugged')
+Plug 'dstein64/vim-startuptime'
 Plug 'dense-analysis/ale'
 Plug 'elmcast/elm-vim'
 Plug 'junegunn/fzf.vim'
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}} " Coc intellisense engine
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 if filereadable(expand("~/.vimrc_background"))
@@ -363,20 +293,18 @@ let g:ale_fixers = {
 
 set tags=./tags;
 
-"netrw
-" let g:netrw_banner = 2
-
 " Reset syntastic highlighting
 highlight clear SpellBad
 highlight clear SpellCap
 highlight SpellBad cterm=bold
 highlight SpellCap cterm=bold
 
-" Allow long linter suggestions to wrap to a second line
-set cmdheight=2
+set cmdheight=2 "Allow long linter suggestions to wrap to a second line
 
 " Conquer of Completion
 nmap <silent> gd <Plug>(coc-definition)
+nmap <leader>rn <Plug>(coc-rename)
+let g:coc_node_path = "/Users/jpeterson/.nvm/versions/node/v12.14.0/bin/node"
 
 " coc-prettier
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
