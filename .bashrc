@@ -20,7 +20,7 @@ export TERM=screen-256color
 export XML_CATALOG_FILES=/usr/local/etc/xml/catalog # for AsciiDoc a2x
 
 # Only load Liquid Prompt in interactive shells, not from a script or from scp
-[[ $- = *i* ]] && source ~/src/github.com/nojhan/liquidprompt/liquidprompt
+# [[ $- = *i* ]] && source ~/src/github.com/nojhan/liquidprompt/liquidprompt
 
 BASE16_SHELL=$HOME/.config/base16-shell/
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
@@ -45,3 +45,4 @@ export NVM_DIR="$HOME/.nvm"
 #   source ~/.bash_nvm
 # fi
 
+source $HOME/.bash_ps1
